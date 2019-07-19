@@ -10,21 +10,44 @@ import UIKit
 
 class UserDetailViewController: UIViewController {
 
+    var user: UserInformation?
+    
+    @IBOutlet weak var userNameLabel: UILabel!
+    
+    
+    @IBOutlet weak var emailLabel: UILabel!
+    
+    @IBOutlet weak var addressLabel: UILabel!
+    
+    @IBOutlet weak var phoneLabel: UILabel!
+    
+    @IBOutlet weak var lagreImage: UIImageView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setupView()
         // Do any additional setup after loading the view.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+  
+    func setupView(){
+        
+        let data = try? Data.init(contentsOf: URL(string: user!.picture.large)!)
+        lagreImage?.image = UIImage(data: data!)
+        userNameLabel.text = formatName(userName: user!.name)
+        emailLabel.text = user?.email
+        phoneLabel.text = contactDetails(cell: user!.cell, phone: user!.phone)
+        addressLabel.text = formatAddress(location: user!.location)
     }
-    */
-
+    
+    func formatName(userName: UserName)-> String{
+        return userName.title.capitalized + " " + userName.first.capitalized + " " + userName.last.uppercased()
+    }
+    
+    func contactDetails(cell: String, phone: String)-> String{
+    return cell + " / " + phone
+    }
+    func formatAddress(location: Location)-> String{
+        return location.street+", "+location.city+", "+location.state
+    }
 }
